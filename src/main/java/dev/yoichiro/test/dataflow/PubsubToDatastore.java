@@ -84,6 +84,7 @@ public class PubsubToDatastore {
             ));
             return rows;
         }
+        
     }
 
     public interface PubsubToDatastoreOptions extends DataflowPipelineOptions {
