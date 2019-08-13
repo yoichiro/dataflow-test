@@ -5,6 +5,7 @@ import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
 
+@SuppressWarnings("serial")
 public class TransformData extends PTransform<PCollection<String>, PCollection<Entity>> {
 
     private PubsubToDatastoreOptions options;

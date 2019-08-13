@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import static com.google.datastore.v1.client.DatastoreHelper.makeKey;
 import static com.google.datastore.v1.client.DatastoreHelper.makeValue;
 
+@SuppressWarnings("serial")
 public class AddDatetimeFn extends DoFn<String, Entity> {
 
     private static String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
