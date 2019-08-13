@@ -5,7 +5,6 @@ import org.apache.beam.sdk.io.gcp.datastore.DatastoreIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 
-@SuppressWarnings("serial")
 public class PubsubToDatastore {
 
     public void execute(String[] args) {

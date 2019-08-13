@@ -2,7 +2,6 @@ package dev.yoichiro.test.dataflow;
 
 import com.google.api.services.pubsub.Pubsub;
 import com.google.api.services.pubsub.model.PublishRequest;
-import com.google.api.services.pubsub.model.PublishResponse;
 import com.google.api.services.pubsub.model.PubsubMessage;
 import com.google.common.collect.ImmutableList;
 import org.apache.beam.sdk.options.Default;
@@ -46,7 +45,7 @@ public class MemoryToPubsub {
                 List<PubsubMessage> messages = ImmutableList.of(pubsubMessage);
                 PublishRequest publishRequest = new PublishRequest().setMessages(messages);
 
-                PublishResponse publishResponse = pubsub.projects().topics()
+                pubsub.projects().topics()
                         .publish(toTopic, publishRequest)
                         .execute();
 
