@@ -4,6 +4,7 @@ import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.gcp.datastore.DatastoreIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
+import org.apache.beam.sdk.transforms.ParDo;
 
 public class PubsubToDatastore {
 
@@ -14,9 +15,12 @@ public class PubsubToDatastore {
 
         Pipeline pipeline = Pipeline.create(options);
 
-        pipeline.apply("read from Pubsub", PubsubIO.readStrings().fromTopic(options.getFromTopic()))
+        pipeline.apply("read from Pubsub 1", PubsubIO.readStrings().fromTopic(options.getFromTopic()))
                 .apply("transform Pubsub data", new TransformData(options))
                 .apply("write to Datastore", DatastoreIO.v1().write().withProjectId(options.getProject()));
+
+        pipeline.apply("read from Pubsub 2", PubsubIO.readStrings().fromTopic(options.getFromTopic()))
+                .apply("simple output data", ParDo.of(new SimpleOutputDataFn()));
 
         pipeline.run().waitUntilFinish();
     }
