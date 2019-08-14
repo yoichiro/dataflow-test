@@ -13,7 +13,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MemoryToPubsub {
 
@@ -38,10 +40,15 @@ public class MemoryToPubsub {
             for (int i = 1; i <= rowNum; i++) {
                 String rowId = String.valueOf(i);
                 // "1,1,JobId: 1  rowId: 1 no test desu,2018-05-01 14:02:38.420"
+                ZonedDateTime now = ZonedDateTime.now(ZoneId.of(TIME_ZONE));
                 String message = jobId + "," + rowId + ",JobId: " + jobId + " rowId: " + rowId
-                        + " no test desu," + dtFormatter.format(ZonedDateTime.now(ZoneId.of(TIME_ZONE)));
+                        + " no test desu," + dtFormatter.format(now);
                 PubsubMessage pubsubMessage = new PubsubMessage();
                 pubsubMessage.encodeData(message.getBytes("UTF-8"));
+                Map<String, String> attributes = new HashMap<>();
+                attributes.put("eventTimestamp", String.valueOf(now.toInstant().toEpochMilli()));
+                System.out.println(attributes);
+                pubsubMessage.setAttributes(attributes);
                 List<PubsubMessage> messages = ImmutableList.of(pubsubMessage);
                 PublishRequest publishRequest = new PublishRequest().setMessages(messages);
 
