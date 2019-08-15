@@ -28,11 +28,13 @@ public class MemoryToPubsub {
         private String toTopic;
         private Integer jobId;
         private Integer rowNum;
+        private String userId;
 
-        public PubsubJob(String toTopic, int jobId, int rowNum) {
+        public PubsubJob(String toTopic, int jobId, int rowNum, String userId) {
             this.toTopic = toTopic;
             this.jobId = jobId;
             this.rowNum = rowNum;
+            this.userId = userId;
         }
 
         public void publishData() throws IOException {
@@ -42,7 +44,7 @@ public class MemoryToPubsub {
                 // "1,1,JobId: 1  rowId: 1 no test desu,2018-05-01 14:02:38.420"
                 ZonedDateTime now = ZonedDateTime.now(ZoneId.of(TIME_ZONE));
                 String message = jobId + "," + rowId + ",JobId: " + jobId + " rowId: " + rowId
-                        + " no test desu," + dtFormatter.format(now);
+                        + " no test desu," + dtFormatter.format(now) + "," + userId;
                 PubsubMessage pubsubMessage = new PubsubMessage();
                 pubsubMessage.encodeData(message.getBytes("UTF-8"));
                 Map<String, String> attributes = new HashMap<>();
@@ -83,6 +85,10 @@ public class MemoryToPubsub {
         Integer getRowNum();
         void setRowNum(Integer rowNum);
 
+        @Default.String("")
+        String getUserId();
+        void setUserId(String userId);
+
     }
 
     public void execute(String[] args) {
@@ -91,10 +97,11 @@ public class MemoryToPubsub {
         String toTopic = options.getToTopic();
         int jobNum = options.getJobNum();
         int rowNum = options.getRowNum();
+        String userId = options.getUserId();
 
         List<PubsubJob> jobs = new ArrayList<>();
         for (int i = 1; i <= jobNum; i++) {
-            jobs.add(new PubsubJob(toTopic, i, rowNum));
+            jobs.add(new PubsubJob(toTopic, i, rowNum, userId));
         }
         jobs.parallelStream().forEach(x -> {
             x.doJob();
