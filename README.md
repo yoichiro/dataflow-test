@@ -20,5 +20,9 @@ $ ./deploy.sh
 **Client**
 
 ```bash
-$ ./client.sh
+$ ./client.sh 1 1 u1
 ```
+
+* Argument 1: jobNum
+* Argument 2: rowNum
+* Argument 3: userId
